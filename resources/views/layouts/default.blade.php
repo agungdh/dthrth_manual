@@ -8,9 +8,9 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{url('/')}}/assets/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/assets/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{url('/')}}/assets/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="/assets/AdminLTE-3.2.0/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -36,8 +36,8 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{url('/')}}/assets/AdminLTE-3.2.0/index3.html" class="brand-link">
-      <img src="{{url('/')}}/assets/Angular_gradient.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="/assets/AdminLTE-3.2.0/index3.html" class="brand-link">
+      <img src="/assets/Angular_gradient.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">DTHRTH</span>
     </a>
 
@@ -74,10 +74,10 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-<script src="{{url('/')}}/assets/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
+<script src="/assets/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="{{url('/')}}/assets/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="{{url('/')}}/assets/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
+<script src="/assets/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
 </body>
 </html>
