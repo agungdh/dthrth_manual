@@ -79,5 +79,11 @@
 <script src="/assets/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/assets/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
+
+<script defer src="/assets/alpine-3.14.1.min.js"></script>
+<script src="/assets/axios-1.7.3.min.js"></script>
+
+@stack('js')
+
 </body>
 </html>
