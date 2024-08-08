@@ -8,7 +8,7 @@
 
         <form @@submit.prevent="submit()">
             <div class="input-group mb-3">
-            <input type="text" autocomplete="username" class="form-control" placeholder="Username">
+            <input type="text" autocomplete="username" class="form-control" placeholder="Username" x-model="form.username">
             <div class="input-group-append">
                 <div class="input-group-text">
                 <span class="fas fa-user"></span>
@@ -16,7 +16,7 @@
             </div>
             </div>
             <div class="input-group mb-3">
-            <input type="password" autocomplete="current-password" class="form-control" placeholder="Password">
+            <input type="password" autocomplete="current-password" class="form-control" placeholder="Password" x-model="form.password">
             <div class="input-group-append">
                 <div class="input-group-text">
                 <span class="fas fa-lock"></span>
