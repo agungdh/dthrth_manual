@@ -1,92 +1,97 @@
 @extends('layouts.default')
 
 @section('content')
-    <div class="card" x-data="form">
-        <form @@submit.prevent="submit()">
-            <fieldset :disabled="loading">
-                <div class="card-header">
-                    <h3 class="card-title">{{isset($skpd) ? 'Ubah' : 'Tambah'}} SKPD</h3>
-                </div>
-                <div class="card-body">
+@verbatim
+<div class="card" x-data="form">
+    <form @submit.prevent="submit()">
+        <fieldset :disabled="loading">
+            <div class="card-header">
+                <h3 class="card-title" x-text="`${skpd ? 'Ubah' : 'Tambah'} SKPD`"></h3>
+            </div>
+            <div class="card-body">
 
-                    <div class="form-group">
-                        <label>SKPD</label>
-                        <input type="text" class="form-control" :class="hasAnyError(form) && 'is-invalid'" placeholder="SKPD" x-model="form.skpd.value">
-                    </div>
+                <div class="form-group">
+                    <label>SKPD</label>
+                    <input type="text" class="form-control" :class="hasAnyError(form) && 'is-invalid'" placeholder="SKPD" x-model="form.skpd.value">
+                </div>
 
-                </div>
-                <div class="card-footer">
-                    <a href="/skpd"><button type="button" class="btn btn-secondary">Kembali</button></a>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </fieldset>
-        </form>
-    </div>
+            </div>
+            <div class="card-footer">
+                <a href="/skpd"><button type="button" class="btn btn-secondary">Kembali</button></a>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+@endverbatim
 @endsection
 
 @push('js')
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('form', () => ({
-            loading: false,
+var skpd = {{ isset($skpd) ? Js::from($skpd) : 'null' }}
 
-            form: {
-                skpd: {value: '', errors: []},
-            },
+document.addEventListener('alpine:init', () => {
+    Alpine.data('form', () => ({
+        loading: false,
 
-            init() {
-                var that = this
+        form: {
+            skpd: {value: '', errors: []},
+        },
 
-                @if(isset($skpd))
-                axios.get('/skpd/{{$skpd->id}}')
+        init() {
+            var that = this
+
+            if (skpd) {
+                axios.get(`/skpd/${skpd.id}`)
                 .then(function (response) {
                     let data = response.data
 
                     setFormData(that.form, data)
                 })
-                @endif
-            },
+            }
+        },
 
-            submit() {
-                var that = this
+        submit() {
+            var that = this
 
-                this.loading = true
+            this.loading = true
 
-                @if(isset($skpd))
-                axios.put('/skpd/{{$skpd->id}}', formValue(this.form))
-                @else
-                axios.post('/skpd', formValue(this.form))
-                @endif
-                .then(function (response) {
-                    resetFormErrors(that.form)
+            if (skpd) {
+                httpForm = axios.put(`/skpd/${skpd.id}`, formValue(this.form))
+            } else {
+                httpForm = axios.post('/skpd', formValue(this.form))
+            }
 
-                    storeNotif({type: 'success', message: 'Berhasil {{isset($skpd) ? 'ubah' : 'tambah'}} data'})
+            httpForm.then(function (response) {
+                resetFormErrors(that.form)
 
-                    window.location = '/skpd'
-                })
-                .catch(function (error) {
-                    switch (error.response.status) {
-                        case 422:
-                            resetFormErrors(that.form)
+                storeNotif({type: 'success', message: `Berhasil ${skpd ? 'ubah' : 'tambah'} data`})
 
-                            let errors = error.response.data.errors
+                window.location = '/skpd'
+            })
+            .catch(function (error) {
+                switch (error.response.status) {
+                    case 422:
+                        resetFormErrors(that.form)
 
-                            for (const key in errors) {
-                                const element = errors[key];
+                        let errors = error.response.data.errors
 
-                                that.form[key].errors = element
-                            }
-                            break;
+                        for (const key in errors) {
+                            const element = errors[key];
 
-                        default:
-                            break;
-                    }
-                })
-                .finally(function () {
-                    that.loading = false
-                });
-            },
-        }))
-    })
+                            that.form[key].errors = element
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            })
+            .finally(function () {
+                that.loading = false
+            });
+        },
+    }))
+})
 </script>
 @endpush

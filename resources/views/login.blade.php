@@ -1,12 +1,13 @@
 @extends('layouts.auth')
 
 @section('content')
+@verbatim
 <div x-data="login">
     <div class="card">
         <div class="card-body login-card-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <form @@submit.prevent="submit()">
+        <form @submit.prevent="submit()">
             <fieldset :disabled="loading">
                 <div class="input-group mb-3">
                 <input type="text" autocomplete="username" class="form-control" placeholder="Username" x-model="username">
@@ -37,44 +38,45 @@
         <!-- /.login-card-body -->
     </div>
 </div>
+@endverbatim
 @endsection
 
 @push('js')
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('login', () => ({
-            loading: false,
+document.addEventListener('alpine:init', () => {
+    Alpine.data('login', () => ({
+        loading: false,
 
-            username: '',
-            password: '',
+        username: '',
+        password: '',
 
-            submit() {
-                var that = this
+        submit() {
+            var that = this
 
-                this.loading = true
+            this.loading = true
 
-                axios.post('/login', {
-                    username: this.username,
-                    password: this.password,
-                })
-                .then(function (response) {
-                    window.location = '/'
-                })
-                .catch(function (error) {
-                    switch (error.response.status) {
-                        case 422:
-                            toastr.error('Username/Password Salah!')
-                            break;
+            axios.post('/login', {
+                username: this.username,
+                password: this.password,
+            })
+            .then(function (response) {
+                window.location = '/'
+            })
+            .catch(function (error) {
+                switch (error.response.status) {
+                    case 422:
+                        toastr.error('Username/Password Salah!')
+                        break;
 
-                        default:
-                            break;
-                    }
-                })
-                .finally(function () {
-                    that.loading = false
-                });
-            },
-        }))
-    })
+                    default:
+                        break;
+                }
+            })
+            .finally(function () {
+                that.loading = false
+            });
+        },
+    }))
+})
 </script>
 @endpush
