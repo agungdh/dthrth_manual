@@ -34,14 +34,33 @@
                 skpd: {value: '', errors: []},
             },
 
+            init() {
+                var that = this
+
+                @if(isset($skpd))
+                axios.get('/skpd/{{$skpd->id}}')
+                .then(function (response) {
+                    let data = response.data
+
+                    setFormData(that.form, data)
+                })
+                @endif
+            },
+
             submit() {
                 var that = this
 
                 this.loading = true
 
+                @if(isset($skpd))
+                axios.put('/skpd/{{$skpd->id}}', formValue(this.form))
+                @else
                 axios.post('/skpd', formValue(this.form))
+                @endif
                 .then(function (response) {
                     resetFormErrors(that.form)
+
+                    storeNotif({type: 'success', message: 'Berhasil {{isset($skpd) ? 'ubah' : 'tambah'}} data'})
 
                     window.location = '/skpd'
                 })

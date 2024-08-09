@@ -30,25 +30,16 @@ class SkpdController extends Controller implements HasMiddleware
             ->make();
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('pages.skpd.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('pages.skpd.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CreateUpdateRequest $request)
     {
         $skpd = new Skpd;
@@ -58,35 +49,27 @@ class SkpdController extends Controller implements HasMiddleware
         $skpd->save();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Skpd $skpd)
     {
-        //
+        return $skpd;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Skpd $skpd)
     {
-        //
+        return view('pages.skpd.form', compact([
+            'skpd',
+        ]));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(CreateUpdateRequest $request, Skpd $skpd)
     {
-        //
+        $skpd->skpd = $request->skpd;
+
+        $skpd->save();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Skpd $skpd)
     {
-        //
+        $skpd->delete();
     }
 }

@@ -28,4 +28,10 @@
 
         return false
     }
+
+    function setFormData(form, data) {
+        for (const key in form) {
+            form[key].value = data[key]
+        }
+    }
 </script>

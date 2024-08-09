@@ -142,6 +142,15 @@ $.ajaxSetup({
 
 @include('layouts.scripts.axios-interceptor')
 @include('layouts.scripts.form')
+@include('layouts.scripts.notif')
+
+<script>
+    let notif = pullNotif()
+
+    if (notif) {
+        toastr[notif.type](notif.message)
+    }
+</script>
 
 @stack('js')
 

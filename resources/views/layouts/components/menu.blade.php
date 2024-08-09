@@ -7,6 +7,13 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="/dthrth" class="nav-link">
+                <i class="nav-icon far fa-circle"></i>
+                <p>DTHRTH</p>
+            </a>
+        </li>
+        <li class="nav-header">Master Data</li>
+        <li class="nav-item">
             <a href="/skpd" class="nav-link">
                 <i class="nav-icon far fa-circle"></i>
                 <p>SKPD</p>
