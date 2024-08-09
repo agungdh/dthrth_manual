@@ -7,29 +7,31 @@
         <p class="login-box-msg">Sign in to start your session</p>
 
         <form @@submit.prevent="submit()">
-            <div class="input-group mb-3">
-            <input type="text" autocomplete="username" class="form-control" placeholder="Username" x-model="form.username">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                <span class="fas fa-user"></span>
+            <fieldset :disabled="loading">
+                <div class="input-group mb-3">
+                <input type="text" autocomplete="username" class="form-control" placeholder="Username" x-model="form.username">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                    </div>
                 </div>
-            </div>
-            </div>
-            <div class="input-group mb-3">
-            <input type="password" autocomplete="current-password" class="form-control" placeholder="Password" x-model="form.password">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                <span class="fas fa-lock"></span>
                 </div>
-            </div>
-            </div>
-            <div class="row">
-            <!-- /.col -->
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-            </div>
-            <!-- /.col -->
-            </div>
+                <div class="input-group mb-3">
+                <input type="password" autocomplete="current-password" class="form-control" placeholder="Password" x-model="form.password">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                <!-- /.col -->
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </div>
+                <!-- /.col -->
+                </div>
+            </fieldset>
         </form>
         </div>
         <!-- /.login-card-body -->
@@ -48,8 +50,21 @@
                 password: '',
             },
 
-            async submit() {
-                await axios.post('/login', this.form)
+            submit() {
+                var that = this
+
+                this.loading = true
+
+                axios.post('/login', this.form)
+                .then(function (response) {
+                    window.location = '/'
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+                .finally(function () {
+                    that.loading = false
+                });
             },
         }))
     })
