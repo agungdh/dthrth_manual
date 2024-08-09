@@ -13,6 +13,7 @@
                 <div class="form-group">
                     <label>SKPD</label>
                     <input type="text" class="form-control" :class="hasAnyError(form) && 'is-invalid'" placeholder="SKPD" x-model="form.skpd.value">
+                    <span class="error invalid-feedback" x-text="`${getFormError(form, 'skpd')}`"></span>
                 </div>
 
             </div>

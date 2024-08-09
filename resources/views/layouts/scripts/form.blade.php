@@ -29,6 +29,10 @@
         return false
     }
 
+    function getFormError(form, key) {
+        return form[key]?.errors?.[0] || ''
+    }
+
     function setFormData(form, data) {
         for (const key in form) {
             form[key].value = data[key]
