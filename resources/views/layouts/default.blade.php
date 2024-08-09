@@ -70,7 +70,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar Menu -->
-      @include('components.menu')
+      @include('layouts.components.menu')
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
