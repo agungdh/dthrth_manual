@@ -1,3 +1,7 @@
+@php
+    $user = auth()->user();
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,8 +34,26 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
+      <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <img src="/assets/Angular_gradient.png" class="user-image img-circle elevation-2" alt="User Image">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <!-- User image -->
+          <li class="user-header bg-primary">
+            <img src="/assets/Angular_gradient.png" class="img-circle elevation-2" alt="User Image">
 
+            <p>
+              {{$user->nama}}
+              <small>{{$user->username}}</small>
+            </p>
+          </li>
+          <!-- Menu Footer-->
+          <li class="user-footer">
+            <a href="/profil" class="btn btn-default btn-flat">Profil</a>
+            <a href="/logout" class="btn btn-default btn-flat float-right">Sign out</a>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>
