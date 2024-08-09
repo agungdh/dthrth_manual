@@ -17,13 +17,13 @@ class UserSeeder extends Seeder
         });
 
         User::factory()->create([
-            'name' => 'Admin',
+            'nama' => 'Admin',
             'username' => 'admin',
             'password' => 'admin',
         ])->assignRole('admin');
 
         User::factory()->create([
-            'name' => 'Operator',
+            'nama' => 'Operator',
             'username' => 'operator',
             'password' => 'operator',
         ])->assignRole('operator');
