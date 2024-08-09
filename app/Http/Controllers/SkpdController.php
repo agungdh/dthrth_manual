@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Skpd\CreateUpdateRequest;
 use App\Models\Skpd;
 use DataTables;
 use Illuminate\Http\Request;
@@ -22,7 +23,9 @@ class SkpdController extends Controller implements HasMiddleware
 
         return DataTables::of($datas)
             ->addColumn('action', function ($data) {
-                return $data->id;
+                return view('pages.skpd.action', compact([
+                    'data',
+                ]));
             })
             ->make();
     }
@@ -40,15 +43,19 @@ class SkpdController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        //
+        return view('pages.skpd.form');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateUpdateRequest $request)
     {
-        //
+        $skpd = new Skpd;
+
+        $skpd->skpd = $request->skpd;
+
+        $skpd->save();
     }
 
     /**

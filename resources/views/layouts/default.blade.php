@@ -67,7 +67,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/assets/AdminLTE-3.2.0/index3.html" class="brand-link">
+    <a href="/" class="brand-link">
       <img src="/assets/Angular_gradient.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">DTHRTH</span>
     </a>
@@ -139,7 +139,9 @@ $.ajaxSetup({
 
 <script defer src="/assets/alpine-3.14.1.min.js"></script>
 <script src="/assets/axios-1.7.3.min.js"></script>
+
 @include('layouts.scripts.axios-interceptor')
+@include('layouts.scripts.form')
 
 @stack('js')
 

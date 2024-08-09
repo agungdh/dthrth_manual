@@ -6,12 +6,13 @@
             <h3 class="card-title">SKPD</h3>
         </div>
         <div class="card-body">
+            <div class="mb-3">
+                <a href="/skpd/create"><button class="btn btn-sm btn-success">Tambah</button></a>
+            </div>
             <table id="tabel" class="table table-sm table-striped table-hover" style="width: 100%">
                 <thead>
                     <tr>
-                        @for ($i = 1; $i <= 50; $i++)
                         <th>SKPD</th>
-                        @endfor
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -32,10 +33,8 @@
                 type: 'POST'
             },
             columns: [
-                @for ($i = 1; $i <= 50; $i++)
               {data: 'skpd', name: 'skpd'},
-              @endfor
-              {data: 'action'},
+              {data: 'action', orderable: false, searchable: false},
           ],
         } );
     });
