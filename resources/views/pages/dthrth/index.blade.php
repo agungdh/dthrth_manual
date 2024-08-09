@@ -3,16 +3,17 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">SKPD</h3>
+        <h3 class="card-title">DTHRTH</h3>
     </div>
     <div class="card-body">
         <div class="mb-3">
-            <a href="/skpd/create"><button class="btn btn-sm btn-success">Tambah</button></a>
+            <a href="/dthrth/create"><button class="btn btn-sm btn-success">Tambah</button></a>
         </div>
         <table id="tabel" class="table table-sm table-striped table-hover" style="width: 100%">
             <thead>
                 <tr>
-                    <th>SKPD</th>
+                    <th>Bulan/Tahun</th>
+                    <th>Tanggal Upload</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -34,7 +35,7 @@ function hapusData(id) {
         confirmButtonText: "Yes, delete it!"
     }).then((result) => {
         if (result.isConfirmed) {
-            axios.delete(`/skpd/${id}`).then(function (response) {
+            axios.delete(`/dthrth/${id}`).then(function (response) {
                 toastr.error('Berhasil hapus data')
 
                 $('#tabel').DataTable().ajax.reload()
@@ -49,11 +50,12 @@ $(function() {
         processing: true,
         serverSide: true,
         ajax: {
-            url: `/skpd/datatable`,
+            url: `/dthrth/datatable`,
             type: 'POST'
         },
         columns: [
-            {data: 'skpd', name: 'skpd'},
+            {data: 'bulan_tahun', name: 'bulan_tahun'},
+            {data: 'uploaded_at', name: 'uploaded_at'},
             {data: 'action', orderable: false, searchable: false},
         ],
     } );

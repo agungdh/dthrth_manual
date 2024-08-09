@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Skpd\CreateUpdateRequest;
-use App\Models\Skpd;
+use App\Http\Requests\DTHRTH\CreateUpdateRequest;
+use App\Models\DTHRTH;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -19,11 +19,11 @@ class DTHRTHController extends Controller implements HasMiddleware
 
     public function datatable(Request $request)
     {
-        $datas = Skpd::query();
+        $datas = DTHRTH::query();
 
         return DataTables::of($datas)
             ->addColumn('action', function ($data) {
-                return view('pages.skpd.action', compact([
+                return view('pages.dthrth.action', compact([
                     'data',
                 ]));
             })
@@ -32,43 +32,43 @@ class DTHRTHController extends Controller implements HasMiddleware
 
     public function index()
     {
-        return view('pages.skpd.index');
+        return view('pages.dthrth.index');
     }
 
     public function create()
     {
-        return view('pages.skpd.form');
+        return view('pages.dthrth.form');
     }
 
     public function store(CreateUpdateRequest $request)
     {
-        $skpd = new Skpd;
+        $skpd = new DTHRTH;
 
         $skpd->skpd = $request->skpd;
 
         $skpd->save();
     }
 
-    public function show(Skpd $skpd)
+    public function show(DTHRTH $skpd)
     {
         return $skpd;
     }
 
-    public function edit(Skpd $skpd)
+    public function edit(DTHRTH $skpd)
     {
-        return view('pages.skpd.form', compact([
+        return view('pages.dthrth.form', compact([
             'skpd',
         ]));
     }
 
-    public function update(CreateUpdateRequest $request, Skpd $skpd)
+    public function update(CreateUpdateRequest $request, DTHRTH $skpd)
     {
         $skpd->skpd = $request->skpd;
 
         $skpd->save();
     }
 
-    public function destroy(Skpd $skpd)
+    public function destroy(DTHRTH $skpd)
     {
         $skpd->delete();
     }

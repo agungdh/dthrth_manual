@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('dthrths', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('skpd_id')->constrained();
-            $table->integer('bulan');
-            $table->integer('tahun');
+            $table->date('bulan_tahun');
+            $table->date('uploaded_at');
             $table->timestamps();
         });
     }
