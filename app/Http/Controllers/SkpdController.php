@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Skpd;
+use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
@@ -12,6 +14,17 @@ class SkpdController extends Controller implements HasMiddleware
         return [
             'auth',
         ];
+    }
+
+    public function datatable(Request $request)
+    {
+        $datas = Skpd::query();
+
+        return DataTables::of($datas)
+            ->addColumn('action', function ($data) {
+                return $data->id;
+            })
+            ->make();
     }
 
     /**
