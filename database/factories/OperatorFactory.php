@@ -19,7 +19,7 @@ class OperatorFactory extends Factory
     public function definition(): array
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole('operator');
 
         return [
             'user_id' => $user->id,

@@ -23,12 +23,12 @@ return new class extends Migration
             $table->date('tanggal_sp2d')->nullable();
             $table->string('kode_akun_belanja')->nullable();
             $table->string('kode_akun_pajak')->nullable();
-            $table->bigInteger('ppn')->nullable();
-            $table->bigInteger('pph21')->nullable();
-            $table->bigInteger('pph22')->nullable();
-            $table->bigInteger('pph23')->nullable();
-            $table->bigInteger('pph4_2')->nullable();
-            $table->bigInteger('jumlah')->nullable();
+            $table->decimal('ppn', total: 20, places: 2)->nullable();
+            $table->decimal('pph21', total: 20, places: 2)->nullable();
+            $table->decimal('pph22', total: 20, places: 2)->nullable();
+            $table->decimal('pph23', total: 20, places: 2)->nullable();
+            $table->decimal('pph4_2', total: 20, places: 2)->nullable();
+            $table->decimal('jumlah', total: 20, places: 2)->nullable();
             $table->string('npwp')->nullable();
             $table->string('nama')->nullable();
             $table->string('kode_billing')->nullable();

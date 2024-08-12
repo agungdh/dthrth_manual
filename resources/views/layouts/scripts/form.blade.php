@@ -21,14 +21,8 @@
         }
     }
 
-    function hasAnyError(form) {
-        for (const key in form) {
-            const element = form[key];
-
-            return element.errors.length > 0
-        }
-
-        return false
+    function hasAnyError(form, key) {
+        return form[key].errors.length > 0
     }
 
     function getFormError(form, key) {
@@ -38,6 +32,16 @@
     function setFormData(form, data) {
         for (const key in form) {
             form[key].value = data[key]
+        }
+    }
+
+    function setFormError(form, error) {
+        let errors = error.response.data.errors
+
+        for (const key in errors) {
+            const element = errors[key];
+
+            form[key].errors = element
         }
     }
 </script>

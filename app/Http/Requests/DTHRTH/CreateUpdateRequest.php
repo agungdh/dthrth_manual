@@ -22,6 +22,8 @@ class CreateUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'bulan' => 'required|integer|between:1,12',
+            'tahun' => 'required|integer',
             'berkas' => 'required|file',
         ];
     }

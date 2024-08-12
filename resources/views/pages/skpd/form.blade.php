@@ -12,7 +12,7 @@
 
                 <div class="form-group">
                     <label>SKPD</label>
-                    <input type="text" class="form-control" :class="hasAnyError(form) && 'is-invalid'" placeholder="SKPD" x-model="form.skpd.value">
+                    <input type="text" class="form-control" :class="hasAnyError(form, 'skpd') && 'is-invalid'" placeholder="SKPD" x-model="form.skpd.value">
                     <span class="error invalid-feedback" x-text="`${getFormError(form, 'skpd')}`"></span>
                 </div>
 
@@ -70,13 +70,7 @@ document.addEventListener('alpine:init', () => {
                     case 422:
                         resetFormErrors(that.form)
 
-                        let errors = error.response.data.errors
-
-                        for (const key in errors) {
-                            const element = errors[key];
-
-                            that.form[key].errors = element
-                        }
+                        setFormError(that.form, error)
                         break;
 
                     default:

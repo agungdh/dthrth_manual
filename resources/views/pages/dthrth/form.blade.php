@@ -10,10 +10,28 @@
             </div>
             <div class="card-body">
 
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Bulan</label>
+                            <input type="text" class="form-control" :class="hasAnyError(form, 'bulan') && 'is-invalid'" placeholder="Bulan" x-model="form.bulan.value">
+                            <span class="error invalid-feedback" x-text="`${getFormError(form, 'bulan')}`"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Tahun</label>
+                            <input type="text" class="form-control" :class="hasAnyError(form, 'tahun') && 'is-invalid'" placeholder="Tahun" x-model="form.tahun.value">
+                            <span class="error invalid-feedback" x-text="`${getFormError(form, 'tahun')}`"></span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Berkas</label>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" :class="hasAnyError(form) && 'is-invalid'" placeholder="Berkas" x-model="form.berkas.value">
+                        <input type="file" class="custom-file-input" :class="hasAnyError(form, 'berkas') && 'is-invalid'" placeholder="Berkas" id="berkas">
                         <span class="error invalid-feedback" x-text="`${getFormError(form, 'berkas')}`"></span>
                         <label class="custom-file-label">Choose file</label>
                     </div>
@@ -39,6 +57,8 @@ document.addEventListener('alpine:init', () => {
         loading: false,
 
         form: {
+            bulan: {value: '', errors: []},
+            tahun: {value: '', errors: []},
             berkas: {value: '', errors: []},
         },
 
@@ -55,18 +75,18 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
+
         submit() {
             var that = this
 
             this.loading = true
 
-            if (dthrth) {
-                httpForm = axios.put(`/dthrth/${dthrth.id}`, formValue(this.form))
-            } else {
-                httpForm = axios.post('/dthrth', formValue(this.form))
-            }
+            let form = formValue(this.form, dthrth ? 'PUT' : 'POST')
 
-            httpForm.then(function (response) {
+            form.set('berkas', document.getElementById('berkas').files[0])
+
+            axios.post(dthrth ? `/dthrth/${dthrth.id}` : '/dthrth', form)
+            .then(function (response) {
                 resetFormErrors(that.form)
 
                 // storeNotif({type: 'success', message: `Berhasil ${dthrth ? 'ubah' : 'tambah'} data`})
@@ -80,13 +100,7 @@ document.addEventListener('alpine:init', () => {
                     case 422:
                         resetFormErrors(that.form)
 
-                        let errors = error.response.data.errors
-
-                        for (const key in errors) {
-                            const element = errors[key];
-
-                            that.form[key].errors = element
-                        }
+                        setFormError(that.form, error)
                         break;
 
                     default:

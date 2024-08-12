@@ -15,7 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('skpd_id')->constrained();
             $table->date('bulan_tahun');
-            $table->date('uploaded_at');
+            $table->dateTime('uploaded_at');
             $table->timestamps();
         });
     }
