@@ -50,8 +50,6 @@
 
 @push('js')
 <script>
-var dthrth = {{ isset($dthrth) ? Js::from($dthrth) : 'null' }}
-
 document.addEventListener('alpine:init', () => {
     Alpine.data('form', () => ({
         loading: false,
@@ -60,19 +58,6 @@ document.addEventListener('alpine:init', () => {
             bulan: {value: '', errors: []},
             tahun: {value: '', errors: []},
             berkas: {value: '', errors: []},
-        },
-
-        init() {
-            var that = this
-
-            if (dthrth) {
-                axios.get(`/dthrth/${dthrth.id}`)
-                .then(function (response) {
-                    let data = response.data
-
-                    setFormData(that.form, data)
-                })
-            }
         },
 
         async check() {
@@ -104,17 +89,17 @@ document.addEventListener('alpine:init', () => {
 
                 this.loading = true
 
-                let form = formValue(this.form, dthrth ? 'PUT' : 'POST')
+                let form = formValue(this.form, 'POST')
 
                 form.set('berkas', document.getElementById('berkas').files[0])
 
-                axios.post(dthrth ? `/dthrth/${dthrth.id}` : '/dthrth', form)
+                axios.post('/dthrth', form)
                 .then(function (response) {
                     resetFormErrors(that.form)
 
-                    storeNotif({type: 'success', message: `Berhasil ${dthrth ? 'ubah' : 'tambah'} data`})
+                    storeNotif({type: 'success', message: `Berhasil upload data`})
 
-                    window.location = '/dthrth'
+                    window.location = `/dthrth/${response.data.id}`
                 })
                 .catch(function (error) {
                     switch (error.response.status) {

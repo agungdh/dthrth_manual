@@ -51,7 +51,10 @@ $(function() {
         serverSide: true,
         ajax: {
             url: `/dthrth/datatable`,
-            type: 'POST'
+            type: 'POST',
+            data: function (d) {
+                d.skpd_id = user.operator.skpd.id;
+            }
         },
         columns: [
             {data: 'bulan_tahun', name: 'bulan_tahun'},

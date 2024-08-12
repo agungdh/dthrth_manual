@@ -9,4 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Operator extends Model
 {
     use HasFactory, HasUlids;
+
+    public function skpd()
+    {
+        return $this->belongsTo(Skpd::class);
+    }
 }

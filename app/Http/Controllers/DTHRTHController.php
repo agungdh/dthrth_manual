@@ -23,6 +23,8 @@ class DTHRTHController extends Controller implements HasMiddleware
     {
         $datas = DTHRTH::query();
 
+        $datas = $datas->where('skpd_id', $request->skpd_id);
+
         return DataTables::of($datas)
             ->editColumn('bulan_tahun', function ($data) {
                 return date_format(date_create($data->bulan_tahun), 'm').'/'.date_format(date_create($data->bulan_tahun), 'Y');
@@ -40,20 +42,11 @@ class DTHRTHController extends Controller implements HasMiddleware
 
     public function datatableLihat(Request $request)
     {
-        $datas = DTHRTH::query();
+        $datas = DTHRTHRinci::query();
+
+        $datas = $datas->where('dthrth_id', $request->dthrth_id);
 
         return DataTables::of($datas)
-            ->editColumn('bulan_tahun', function ($data) {
-                return date_format(date_create($data->bulan_tahun), 'm').'/'.date_format(date_create($data->bulan_tahun), 'Y');
-            })
-            ->editColumn('uploaded_at', function ($data) {
-                return date_format(date_create($data->uploaded_at), 'd-m-Y H:i:s');
-            })
-            ->addColumn('action', function ($data) {
-                return view('pages.dthrth.action', compact([
-                    'data',
-                ]));
-            })
             ->make();
     }
 
@@ -86,7 +79,7 @@ class DTHRTHController extends Controller implements HasMiddleware
 
         $worksheet = $spreadsheet->getActiveSheet();
 
-        DB::transaction(function () use ($request, $worksheet) {
+        return DB::transaction(function () use ($request, $worksheet) {
             $checkWhere = [
                 'skpd_id' => auth()->user()->operator->skpd_id,
                 'bulan_tahun' => "{$request->tahun}-{$request->bulan}-01",
@@ -158,11 +151,16 @@ class DTHRTHController extends Controller implements HasMiddleware
 
                 $dthrth_rinci->save();
             }
+
+            return $dthrth;
         });
     }
 
     public function show(DTHRTH $dthrth)
     {
+        $dthrth->bulan_tahun = date_format(date_create($dthrth->bulan_tahun), 'm').'/'.date_format(date_create($dthrth->bulan_tahun), 'Y');
+        $dthrth->uploaded_at = date_format(date_create($dthrth->uploaded_at), 'd-m-Y H:i:s');
+
         return view('pages.dthrth.lihat', compact([
             'dthrth',
         ]));

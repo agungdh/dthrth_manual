@@ -1,5 +1,8 @@
 @php
     $user = auth()->user();
+    $user->load('operator.skpd', 'admin');
+    $user->role = $user->roles()->first()->name;
+    $user->profile = $user[$user->role];
 @endphp
 
 <!DOCTYPE html>
@@ -103,6 +106,10 @@
   </footer>
 </div>
 <!-- ./wrapper -->
+
+<script>
+var user = {{ Js::from($user) }}
+</script>
 
 <!-- jQuery -->
 <script src="/assets/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
