@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index']);
 
 Route::post('/dthrth/datatable', [DTHRTHController::class, 'datatable']);
-Route::post('/dthrth/previewUpload', [DTHRTHController::class, 'previewUpload']);
 Route::resource('/dthrth', DTHRTHController::class);
 
 Route::post('/skpd/datatable', [SkpdController::class, 'datatable']);

@@ -1,11 +1,13 @@
 <script>
-    function formValue(form) {
-        let newForm = {}
+    function formValue(form, method) {
+        const newForm = new FormData();
+
+        newForm.append('_method', method)
 
         for (const key in form) {
             const element = form[key];
 
-            newForm[key] = element.value
+            newForm.append(key, element.value);
         }
 
         return newForm

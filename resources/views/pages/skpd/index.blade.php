@@ -35,7 +35,7 @@ function hapusData(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             axios.delete(`/skpd/${id}`).then(function (response) {
-                toastr.error('Berhasil hapus data')
+                toastr.success('Berhasil hapus data')
 
                 $('#tabel').DataTable().ajax.reload()
             })

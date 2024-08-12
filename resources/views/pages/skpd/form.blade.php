@@ -57,13 +57,8 @@ document.addEventListener('alpine:init', () => {
 
             this.loading = true
 
-            if (skpd) {
-                httpForm = axios.put(`/skpd/${skpd.id}`, formValue(this.form))
-            } else {
-                httpForm = axios.post('/skpd', formValue(this.form))
-            }
-
-            httpForm.then(function (response) {
+            axios.post(skpd ? `/skpd/${skpd.id}` : '/skpd', formValue(this.form, skpd ? 'PUT' : 'POST'))
+            .then(function (response) {
                 resetFormErrors(that.form)
 
                 storeNotif({type: 'success', message: `Berhasil ${skpd ? 'ubah' : 'tambah'} data`})
