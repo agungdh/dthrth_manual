@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Skpd;
+namespace App\Http\Requests\DTHRTH;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,7 +22,7 @@ class CreateUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'skpd' => 'required',
+            'berkas' => 'required|file',
         ];
     }
 }

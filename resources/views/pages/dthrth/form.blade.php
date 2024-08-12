@@ -11,9 +11,12 @@
             <div class="card-body">
 
                 <div class="form-group">
-                    <label>DTHRTH</label>
-                    <input type="text" class="form-control" :class="hasAnyError(form) && 'is-invalid'" placeholder="DTHRTH" x-model="form.dthrth.value">
-                    <span class="error invalid-feedback" x-text="`${getFormError(form, 'dthrth')}`"></span>
+                    <label>Berkas</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" :class="hasAnyError(form) && 'is-invalid'" placeholder="Berkas" x-model="form.berkas.value">
+                        <span class="error invalid-feedback" x-text="`${getFormError(form, 'berkas')}`"></span>
+                        <label class="custom-file-label">Choose file</label>
+                    </div>
                 </div>
 
             </div>
@@ -36,7 +39,7 @@ document.addEventListener('alpine:init', () => {
         loading: false,
 
         form: {
-            dthrth: {value: '', errors: []},
+            berkas: {value: '', errors: []},
         },
 
         init() {
@@ -66,9 +69,11 @@ document.addEventListener('alpine:init', () => {
             httpForm.then(function (response) {
                 resetFormErrors(that.form)
 
-                storeNotif({type: 'success', message: `Berhasil ${dthrth ? 'ubah' : 'tambah'} data`})
+                // storeNotif({type: 'success', message: `Berhasil ${dthrth ? 'ubah' : 'tambah'} data`})
 
-                window.location = '/dthrth'
+                // window.location = '/dthrth'
+
+                console.log('form')
             })
             .catch(function (error) {
                 switch (error.response.status) {

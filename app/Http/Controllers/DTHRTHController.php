@@ -42,6 +42,13 @@ class DTHRTHController extends Controller implements HasMiddleware
 
     public function store(CreateUpdateRequest $request)
     {
+        dd($request->all());
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load('05featuredemo.xlsx');
+
+        return;
+
         $skpd = new DTHRTH;
 
         $skpd->skpd = $request->skpd;
