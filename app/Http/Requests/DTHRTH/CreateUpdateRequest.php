@@ -4,7 +4,7 @@ namespace App\Http\Requests\DTHRTH;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUpdateRequest extends FormRequest
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DTHRTH\CreateUpdateRequest;
+use App\Http\Requests\DTHRTH\UploadRequest;
 use App\Models\DTHRTH;
 use App\Models\DTHRTHRinci;
 use DataTables;
@@ -24,6 +24,31 @@ class DTHRTHController extends Controller implements HasMiddleware
         $datas = DTHRTH::query();
 
         return DataTables::of($datas)
+            ->editColumn('bulan_tahun', function ($data) {
+                return date_format(date_create($data->bulan_tahun), 'm').'/'.date_format(date_create($data->bulan_tahun), 'Y');
+            })
+            ->editColumn('uploaded_at', function ($data) {
+                return date_format(date_create($data->uploaded_at), 'd-m-Y H:i:s');
+            })
+            ->addColumn('action', function ($data) {
+                return view('pages.dthrth.action', compact([
+                    'data',
+                ]));
+            })
+            ->make();
+    }
+
+    public function datatableLihat(Request $request)
+    {
+        $datas = DTHRTH::query();
+
+        return DataTables::of($datas)
+            ->editColumn('bulan_tahun', function ($data) {
+                return date_format(date_create($data->bulan_tahun), 'm').'/'.date_format(date_create($data->bulan_tahun), 'Y');
+            })
+            ->editColumn('uploaded_at', function ($data) {
+                return date_format(date_create($data->uploaded_at), 'd-m-Y H:i:s');
+            })
             ->addColumn('action', function ($data) {
                 return view('pages.dthrth.action', compact([
                     'data',
@@ -53,7 +78,7 @@ class DTHRTHController extends Controller implements HasMiddleware
         return view('pages.dthrth.form');
     }
 
-    public function store(CreateUpdateRequest $request)
+    public function store(UploadRequest $request)
     {
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx;
         $reader->setReadDataOnly(true);
@@ -136,27 +161,19 @@ class DTHRTHController extends Controller implements HasMiddleware
         });
     }
 
-    public function show(DTHRTH $skpd)
+    public function show(DTHRTH $dthrth)
     {
-        return $skpd;
-    }
-
-    public function edit(DTHRTH $skpd)
-    {
-        return view('pages.dthrth.form', compact([
-            'skpd',
+        return view('pages.dthrth.lihat', compact([
+            'dthrth',
         ]));
     }
 
-    public function update(CreateUpdateRequest $request, DTHRTH $skpd)
+    public function destroy(DTHRTH $dthrth)
     {
-        $skpd->skpd = $request->skpd;
+        DB::transaction(function () use ($dthrth) {
+            DTHRTHRinci::where('dthrth_id', $dthrth->id)->delete();
 
-        $skpd->save();
-    }
-
-    public function destroy(DTHRTH $skpd)
-    {
-        $skpd->delete();
+            $dthrth->delete();
+        });
     }
 }

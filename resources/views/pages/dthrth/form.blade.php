@@ -6,7 +6,7 @@
     <form @submit.prevent="submit()">
         <fieldset :disabled="loading">
             <div class="card-header">
-                <h3 class="card-title" x-text="`${dthrth ? 'Ubah' : 'Tambah'} DTHRTH`"></h3>
+                <h3 class="card-title" x-text="`Upload DTHRTH`"></h3>
             </div>
             <div class="card-body">
 
@@ -75,41 +75,63 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-
-        submit() {
-            var that = this
-
-            this.loading = true
-
-            let form = formValue(this.form, dthrth ? 'PUT' : 'POST')
-
-            form.set('berkas', document.getElementById('berkas').files[0])
-
-            axios.post(dthrth ? `/dthrth/${dthrth.id}` : '/dthrth', form)
-            .then(function (response) {
-                resetFormErrors(that.form)
-
-                // storeNotif({type: 'success', message: `Berhasil ${dthrth ? 'ubah' : 'tambah'} data`})
-
-                // window.location = '/dthrth'
-
-                console.log('form')
+        async check() {
+            let response = await axios.post('/dthrth/check', {
+                bulan: this.form.bulan.value,
+                tahun: this.form.tahun.value,
             })
-            .catch(function (error) {
-                switch (error.response.status) {
-                    case 422:
-                        resetFormErrors(that.form)
 
-                        setFormError(that.form, error)
-                        break;
+            if (response.data) {
+                let result = await Swal.fire({
+                    title: "Data sudah ada",
+                    text: "Anda yakin ingin mengganti data yang sudah ada ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, ganti data"
+                })
 
-                    default:
-                        break;
-                }
-            })
-            .finally(function () {
-                that.loading = false
-            });
+                return result.isConfirmed
+            }
+
+            return true
+        },
+
+        async submit() {
+            if (await this.check()) {
+                var that = this
+
+                this.loading = true
+
+                let form = formValue(this.form, dthrth ? 'PUT' : 'POST')
+
+                form.set('berkas', document.getElementById('berkas').files[0])
+
+                axios.post(dthrth ? `/dthrth/${dthrth.id}` : '/dthrth', form)
+                .then(function (response) {
+                    resetFormErrors(that.form)
+
+                    storeNotif({type: 'success', message: `Berhasil ${dthrth ? 'ubah' : 'tambah'} data`})
+
+                    window.location = '/dthrth'
+                })
+                .catch(function (error) {
+                    switch (error.response.status) {
+                        case 422:
+                            resetFormErrors(that.form)
+
+                            setFormError(that.form, error)
+                            break;
+
+                        default:
+                            break;
+                    }
+                })
+                .finally(function () {
+                    that.loading = false
+                });
+            }
         },
     }))
 })
