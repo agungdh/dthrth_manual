@@ -44,9 +44,41 @@ class DTHRTHController extends Controller implements HasMiddleware
 
     public function datatableLihat(Request $request)
     {
-        $datas = DTHRTHRinci::query();
+        $datas = DTHRTHRinci::from((new DTHRTHRinci)->getTable().' as r');
 
-        $datas = $datas->where('dthrth_id', $request->dthrth_id);
+        $datas = $datas->select('r.*');
+
+        // Duplikat
+        $datas = $datas->leftJoin(DB::raw('(
+            SELECT id
+            FROM dthrth_rincis
+            WHERE (ntpn IN (
+                SELECT ntpn
+                FROM dthrth_rincis
+                GROUP BY ntpn
+                HAVING COUNT(*) > 1
+            ) or kode_billing IN (
+                SELECT kode_billing
+                FROM dthrth_rincis
+                GROUP BY kode_billing
+                HAVING COUNT(*) > 1
+            ))
+        ) as dr'), 'dr.id', '=', 'r.id');
+
+        if ($request->duplikasi) {
+            if ($request->duplikasi == 'ya') {
+                $datas = $datas->whereNotNull('dr.id');
+            }
+            if ($request->duplikasi == 'tidak') {
+                $datas = $datas->whereNull('dr.id');
+            }
+        }
+
+        $datas = $datas->where('r.dthrth_id', $request->dthrth_id);
+
+        // $datas = DB::table(DB::raw('('.$datas->toSql().') as tbl'));
+
+        // dd($datas->get());
 
         return DataTables::of($datas)
             ->make();

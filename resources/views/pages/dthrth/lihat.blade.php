@@ -41,6 +41,21 @@
             </fieldset>
         </form>
 
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Duplikasi?</label>
+                        <select class="form-control" id="duplikasi">
+                            <option value="">Semua</option>
+                            <option value="ya">Ya</option>
+                            <option value="tidak">Tidak</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <table id="tabel" class="table table-sm table-striped table-hover" style="width: 100%">
             <thead>
                 <tr>
@@ -150,6 +165,10 @@ document.addEventListener('alpine:init', () => {
 })
 
 
+$("#duplikasi").change(function() {
+    $('#tabel').DataTable().ajax.reload()
+});
+
 $(function() {
     $("#bulan_tahun").val(dthrth.bulan_tahun)
     $("#tanggal_upload").val(dthrth.uploaded_at)
@@ -163,29 +182,30 @@ $(function() {
             type: 'POST',
             data: function (d) {
                 d.dthrth_id = dthrth.id;
+                d.duplikasi = $("#duplikasi").val();
             }
         },
         columns: [
-            {data: 'no', name: 'no'},
-            {data: 'no_spm', name: 'no_spm'},
-            {data: 'nilai_spm', name: 'nilai_spm'},
-            {data: 'tanggal_spm', name: 'tanggal_spm'},
-            {data: 'no_sp2d', name: 'no_sp2d'},
-            {data: 'nilai_sp2d', name: 'nilai_sp2d'},
-            {data: 'tanggal_sp2d', name: 'tanggal_sp2d'},
-            {data: 'kode_akun_belanja', name: 'kode_akun_belanja'},
-            {data: 'kode_akun_pajak', name: 'kode_akun_pajak'},
-            {data: 'ppn', name: 'ppn'},
-            {data: 'pph21', name: 'pph21'},
-            {data: 'pph22', name: 'pph22'},
-            {data: 'pph23', name: 'pph23'},
-            {data: 'pph4_2', name: 'pph4_2'},
-            {data: 'jumlah', name: 'jumlah'},
-            {data: 'npwp', name: 'npwp'},
-            {data: 'nama', name: 'nama'},
-            {data: 'kode_billing', name: 'kode_billing'},
-            {data: 'ntpn', name: 'ntpn'},
-            {data: 'ket', name: 'ket'},
+            {data: 'no', name: 'r.no'},
+            {data: 'no_spm', name: 'r.no_spm'},
+            {data: 'nilai_spm', name: 'r.nilai_spm'},
+            {data: 'tanggal_spm', name: 'r.tanggal_spm'},
+            {data: 'no_sp2d', name: 'r.no_sp2d'},
+            {data: 'nilai_sp2d', name: 'r.nilai_sp2d'},
+            {data: 'tanggal_sp2d', name: 'r.tanggal_sp2d'},
+            {data: 'kode_akun_belanja', name: 'r.kode_akun_belanja'},
+            {data: 'kode_akun_pajak', name: 'r.kode_akun_pajak'},
+            {data: 'ppn', name: 'r.ppn'},
+            {data: 'pph21', name: 'r.pph21'},
+            {data: 'pph22', name: 'r.pph22'},
+            {data: 'pph23', name: 'r.pph23'},
+            {data: 'pph4_2', name: 'r.pph4_2'},
+            {data: 'jumlah', name: 'r.jumlah'},
+            {data: 'npwp', name: 'r.npwp'},
+            {data: 'nama', name: 'r.nama'},
+            {data: 'kode_billing', name: 'r.kode_billing'},
+            {data: 'ntpn', name: 'r.ntpn'},
+            {data: 'ket', name: 'r.ket'},
         ],
     } );
 });
