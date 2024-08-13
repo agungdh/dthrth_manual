@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DTHRTH\UploadRequest;
 use App\Models\DTHRTH;
 use App\Models\DTHRTHRinci;
+use App\Models\DTHRTHRiwayat;
+use App\Models\DTHRTHRiwayatRinci;
 use DataTables;
 use DB;
 use Illuminate\Http\Request;
@@ -86,8 +88,7 @@ class DTHRTHController extends Controller implements HasMiddleware
             ];
             $check = DTHRTH::where($checkWhere)->first();
             if ($check) {
-                DTHRTHRinci::where('dthrth_id', $check->id)->delete();
-                DTHRTH::where('id', $check->id)->delete();
+                $this->moveToRiwayat($check, 'upload');
             }
 
             $dthrth = new DTHRTH;
@@ -158,6 +159,8 @@ class DTHRTHController extends Controller implements HasMiddleware
 
     public function show(DTHRTH $dthrth)
     {
+        $dthrth->bulan = (int) date_format(date_create($dthrth->bulan_tahun), 'm');
+        $dthrth->tahun = (int) date_format(date_create($dthrth->bulan_tahun), 'Y');
         $dthrth->bulan_tahun = date_format(date_create($dthrth->bulan_tahun), 'm').'/'.date_format(date_create($dthrth->bulan_tahun), 'Y');
         $dthrth->uploaded_at = date_format(date_create($dthrth->uploaded_at), 'd-m-Y H:i:s');
 
@@ -169,9 +172,54 @@ class DTHRTHController extends Controller implements HasMiddleware
     public function destroy(DTHRTH $dthrth)
     {
         DB::transaction(function () use ($dthrth) {
-            DTHRTHRinci::where('dthrth_id', $dthrth->id)->delete();
-
-            $dthrth->delete();
+            $this->moveToRiwayat($dthrth, 'delete');
         });
+    }
+
+    private function moveToRiwayat(DTHRTH $dthrth, string $action)
+    {
+        $dthrth->load('rincis');
+
+        $dthrthRiwayat = new DTHRTHRiwayat;
+
+        $dthrthRiwayat->skpd_id = $dthrth->skpd_id;
+        $dthrthRiwayat->bulan_tahun = $dthrth->bulan_tahun;
+        $dthrthRiwayat->uploaded_at = $dthrth->uploaded_at;
+        $dthrthRiwayat->archieved_at = now();
+        $dthrthRiwayat->archieved_for = $action;
+
+        $dthrthRiwayat->save();
+
+        $dthrth->rincis->each(function ($rinci) use ($dthrthRiwayat) {
+            $dthrthRiwayatRincis = new DTHRTHRiwayatRinci;
+
+            $dthrthRiwayatRincis->dthrth_riwayat_id = $dthrthRiwayat->id;
+            $dthrthRiwayatRincis->no = $rinci->no;
+            $dthrthRiwayatRincis->no_spm = $rinci->no_spm;
+            $dthrthRiwayatRincis->nilai_spm = $rinci->nilai_spm;
+            $dthrthRiwayatRincis->tanggal_spm = $rinci->tanggal_spm;
+            $dthrthRiwayatRincis->no_sp2d = $rinci->no_sp2d;
+            $dthrthRiwayatRincis->nilai_sp2d = $rinci->nilai_sp2d;
+            $dthrthRiwayatRincis->tanggal_sp2d = $rinci->tanggal_sp2d;
+            $dthrthRiwayatRincis->kode_akun_belanja = $rinci->kode_akun_belanja;
+            $dthrthRiwayatRincis->kode_akun_pajak = $rinci->kode_akun_pajak;
+            $dthrthRiwayatRincis->ppn = $rinci->ppn;
+            $dthrthRiwayatRincis->pph21 = $rinci->pph21;
+            $dthrthRiwayatRincis->pph22 = $rinci->pph22;
+            $dthrthRiwayatRincis->pph23 = $rinci->pph23;
+            $dthrthRiwayatRincis->pph4_2 = $rinci->pph4_2;
+            $dthrthRiwayatRincis->jumlah = $rinci->jumlah;
+            $dthrthRiwayatRincis->npwp = $rinci->npwp;
+            $dthrthRiwayatRincis->nama = $rinci->nama;
+            $dthrthRiwayatRincis->kode_billing = $rinci->kode_billing;
+            $dthrthRiwayatRincis->ntpn = $rinci->ntpn;
+            $dthrthRiwayatRincis->ket = $rinci->ket;
+
+            $dthrthRiwayatRincis->save();
+        });
+
+        DTHRTHRinci::where('dthrth_id', $dthrth->id)->delete();
+
+        $dthrth->delete();
     }
 }

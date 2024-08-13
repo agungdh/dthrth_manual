@@ -1,26 +1,45 @@
 @extends('layouts.default')
 
 @section('content')
-<div class="card">
+<div class="card" x-data="form">
     <div class="card-header">
         <h3 class="card-title">DTHRTH</h3>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Bulan Tahun</label>
-                    <input type="text" class="form-control" id="bulan_tahun" readonly>
-                </div>
-            </div>
+        <form @submit.prevent="submit()">
+            <fieldset :disabled="loading">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Bulan Tahun</label>
+                            <input type="text" class="form-control" id="bulan_tahun" readonly>
+                        </div>
+                    </div>
 
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Tanggal Upload</label>
-                    <input type="text" class="form-control" id="tanggal_upload" readonly>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Tanggal Upload</label>
+                            <input type="text" class="form-control" id="tanggal_upload" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>Berkas</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" :class="hasAnyError(form, 'berkas') && 'is-invalid'" placeholder="Berkas" id="berkas">
+                                <span class="error invalid-feedback" x-text="`${getFormError(form, 'berkas')}`"></span>
+                                <label class="custom-file-label">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </fieldset>
+        </form>
 
         <table id="tabel" class="table table-sm table-striped table-hover" style="width: 100%">
             <thead>
@@ -58,6 +77,78 @@
 @push('js')
 <script>
 var dthrth = {{ Js::from($dthrth) }}
+
+document.addEventListener('alpine:init', () => {
+    Alpine.data('form', () => ({
+        loading: false,
+
+        form: {
+            bulan: {value: dthrth.bulan, errors: []},
+            tahun: {value: dthrth.tahun, errors: []},
+            berkas: {value: '', errors: []},
+        },
+
+        async check() {
+            let response = await axios.post('/dthrth/check', {
+                bulan: this.form.bulan.value,
+                tahun: this.form.tahun.value,
+            })
+
+            if (response.data) {
+                let result = await Swal.fire({
+                    title: "Data sudah ada",
+                    text: "Anda yakin ingin mengganti data yang sudah ada ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, ganti data"
+                })
+
+                return result.isConfirmed
+            }
+
+            return true
+        },
+
+        async submit() {
+            if (await this.check()) {
+                var that = this
+
+                this.loading = true
+
+                let form = formValue(this.form, 'POST')
+
+                form.set('berkas', document.getElementById('berkas').files[0])
+
+                axios.post('/dthrth', form)
+                .then(function (response) {
+                    resetFormErrors(that.form)
+
+                    storeNotif({type: 'success', message: `Berhasil upload data`})
+
+                    window.location = `/dthrth/${response.data.id}`
+                })
+                .catch(function (error) {
+                    switch (error.response.status) {
+                        case 422:
+                            resetFormErrors(that.form)
+
+                            setFormError(that.form, error)
+                            break;
+
+                        default:
+                            break;
+                    }
+                })
+                .finally(function () {
+                    that.loading = false
+                });
+            }
+        },
+    }))
+})
+
 
 $(function() {
     $("#bulan_tahun").val(dthrth.bulan_tahun)

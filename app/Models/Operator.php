@@ -14,4 +14,9 @@ class Operator extends Model
     {
         return $this->belongsTo(Skpd::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

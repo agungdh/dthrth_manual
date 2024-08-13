@@ -13,5 +13,11 @@ class OperatorSeeder extends Seeder
     public function run(): void
     {
         Operator::factory(10)->create();
+
+        $operator = Operator::factory()->create();
+        $operator->user->nama = 'Operator';
+        $operator->user->username = 'operator';
+        $operator->user->password = 'operator';
+        $operator->user->save();
     }
 }
