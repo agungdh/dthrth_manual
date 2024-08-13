@@ -1,5 +1,17 @@
 @extends('layouts.default')
 
+@push('css')
+    <style>
+        .bg-duplicated > td {
+            background-color: yellow !important;
+        }
+
+        .txt-duplicated {
+            background-color: red !important;
+        }
+    </style>
+@endpush
+
 @section('content')
 <div class="card" x-data="form">
     <div class="card-header">
@@ -56,7 +68,7 @@
             </div>
         </div>
 
-        <table id="tabel" class="table table-sm table-striped table-hover" style="width: 100%">
+        <table id="tabel" class="table table-sm" style="width: 100%">
             <thead>
                 <tr>
                     <th>no</th>
@@ -207,6 +219,25 @@ $(function() {
             {data: 'ntpn', name: 'r.ntpn'},
             {data: 'ket', name: 'r.ket'},
         ],
+        drawCallback: function (settings) {
+            var api = this.api();
+
+            let datas = api.rows({ page: 'current' }).data()
+            for (let index = 0; index < datas.length; index++) {
+                const node = datas.row(`:eq(${index})`).node()
+                const data = datas.row(`:eq(${index})`).data()
+
+                if (data.duplikat) {
+                    node.classList.add("bg-duplicated");
+
+                    const node_ntpn = datas.row(`:eq(${index})`).cells()
+                    console.log(node_ntpn)
+                    // console.log(data.ntpn, data.dr_ntpn)
+                    // console.log(data.kode_billing, data.dr_kode_billing)
+                }
+            }
+
+        },
     } );
 });
 </script>

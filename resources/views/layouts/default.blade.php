@@ -27,6 +27,9 @@
     <link rel="stylesheet" href="/assets/AdminLTE-3.2.0/plugins/datatables-fixedcolumns/css/fixedColumns.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/assets/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+
+  @stack('css')
+
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
