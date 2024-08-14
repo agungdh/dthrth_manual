@@ -21,6 +21,11 @@ class DTHRTHController extends Controller implements HasMiddleware
         ];
     }
 
+    public function datatableDuped(Request $request)
+    {
+        return DataTables::of([])->make();
+    }
+
     public function datatable(Request $request)
     {
         $datas = DTHRTH::query();
@@ -78,6 +83,33 @@ class DTHRTHController extends Controller implements HasMiddleware
 
         return DataTables::of($datas)
             ->make();
+    }
+
+    public function listDuped(Request $request)
+    {
+        $dthrth = DTHRTHRinci::with('dthrth.skpd')->findOrFail($request->excluded_id);
+
+        $datas = DTHRTHRinci::with('dthrth.skpd')
+            ->where(function ($query) use ($request) {
+                $query->orWhere('ntpn', $request->ntpn)
+                    ->orWhere('kode_billing', $request->kode_billing);
+            })
+            ->where('id', '!=', $request->excluded_id)
+            ->get();
+
+        $datas->each(function ($data) {
+            $dthrth = $data->dthrth;
+
+            $dthrth->bulan = (int) date_format(date_create($dthrth->bulan_tahun), 'm');
+            $dthrth->tahun = (int) date_format(date_create($dthrth->bulan_tahun), 'Y');
+            $dthrth->bulan_tahun = date_format(date_create($dthrth->bulan_tahun), 'm').'/'.date_format(date_create($dthrth->bulan_tahun), 'Y');
+            $dthrth->uploaded_at = date_format(date_create($dthrth->uploaded_at), 'd-m-Y H:i:s');
+        });
+
+        return [
+            'dthrth' => $dthrth,
+            'dupedList' => $datas,
+        ];
     }
 
     public function checkDuplikat(Request $request)

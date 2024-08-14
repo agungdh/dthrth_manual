@@ -11,4 +11,9 @@ class DTHRTHRinci extends Model
     use HasFactory, HasUlids;
 
     protected $table = 'dthrth_rincis';
+
+    public function dthrth()
+    {
+        return $this->belongsTo(DTHRTH::class, 'dthrth_id');
+    }
 }

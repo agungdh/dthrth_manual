@@ -99,6 +99,93 @@
         <a href="/dthrth"><button type="button" class="btn btn-secondary">Kembali</button></a>
     </div>
 </div>
+
+<div class="modal fade" id="modalDuped">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Data Duplikat</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div class="table-responsive">
+                        <table id="tabel-duped-source" class="table table-sm" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>SKPD</th>
+                                    <th>Bulan/Tahun</th>
+                                    <th>Tanggal Upload</th>
+                                    <th>no</th>
+                                    <th>no_spm</th>
+                                    <th>nilai_spm</th>
+                                    <th>tanggal_spm</th>
+                                    <th>no_sp2d</th>
+                                    <th>nilai_sp2d</th>
+                                    <th>tanggal_sp2d</th>
+                                    <th>kode_akun_belanja</th>
+                                    <th>kode_akun_pajak</th>
+                                    <th>ppn</th>
+                                    <th>pph21</th>
+                                    <th>pph22</th>
+                                    <th>pph23</th>
+                                    <th>pph4_2</th>
+                                    <th>jumlah</th>
+                                    <th>npwp</th>
+                                    <th>nama</th>
+                                    <th>kode_billing</th>
+                                    <th>ntpn</th>
+                                    <th>ket</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table id="tabel-duped" class="table table-sm" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>SKPD</th>
+                                    <th>Bulan/Tahun</th>
+                                    <th>Tanggal Upload</th>
+                                    <th>no</th>
+                                    <th>no_spm</th>
+                                    <th>nilai_spm</th>
+                                    <th>tanggal_spm</th>
+                                    <th>no_sp2d</th>
+                                    <th>nilai_sp2d</th>
+                                    <th>tanggal_sp2d</th>
+                                    <th>kode_akun_belanja</th>
+                                    <th>kode_akun_pajak</th>
+                                    <th>ppn</th>
+                                    <th>pph21</th>
+                                    <th>pph22</th>
+                                    <th>pph23</th>
+                                    <th>pph4_2</th>
+                                    <th>jumlah</th>
+                                    <th>npwp</th>
+                                    <th>nama</th>
+                                    <th>kode_billing</th>
+                                    <th>ntpn</th>
+                                    <th>ket</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
 @endsection
 
 @push('js')
@@ -176,7 +263,6 @@ document.addEventListener('alpine:init', () => {
     }))
 })
 
-
 $("#duplikasi").change(function() {
     $('#tabel').DataTable().ajax.reload()
 });
@@ -235,6 +321,21 @@ $(function() {
                 ntpns.push(data.ntpn)
 
                 if (data.duplikat) {
+                    $(node).click(async function() {
+                        let res = await axios.post('/dthrth/listDuped', {ntpn: data.ntpn, kode_billing: data.kode_billing, excluded_id: data.id})
+                        let resData = res.data
+                        console.log(resData)
+                        // Fill Tabel Source Data
+                        let tbodyRef = $("#tabel-duped-source > tbody")[0]
+                        let newRow = tbodyRef.insertRow();
+                        newRow.insertCell().appendChild(document.createTextNode('new row'));
+                        newRow.insertCell().appendChild(document.createTextNode('new row'));
+                        newRow.insertCell().appendChild(document.createTextNode('new row'));
+                        newRow.insertCell().appendChild(document.createTextNode('new row'));
+
+                        $("#modalDuped").modal()
+                    })
+
                     node.classList.add("bg-duplicated");
                 }
             }

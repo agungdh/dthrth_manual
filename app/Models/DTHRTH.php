@@ -16,4 +16,9 @@ class DTHRTH extends Model
     {
         return $this->hasMany(DTHRTHRinci::class, 'dthrth_id');
     }
+
+    public function skpd()
+    {
+        return $this->belongsTo(Skpd::class);
+    }
 }
