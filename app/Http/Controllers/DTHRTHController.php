@@ -46,11 +46,11 @@ class DTHRTHController extends Controller implements HasMiddleware
     {
         $datas = DTHRTHRinci::from((new DTHRTHRinci)->getTable().' as r');
 
-        $datas = $datas->select('r.*', 'dr.id as duplikat', 'dr.ntpn as dr_ntpn', 'dr.kode_billing as dr_kode_billing');
+        $datas = $datas->select('r.*', 'dr.id as duplikat');
 
         // Duplikat
         $datas = $datas->leftJoin(DB::raw('(
-            SELECT id, ntpn, kode_billing
+            SELECT id
             FROM dthrth_rincis
             WHERE (ntpn IN (
                 SELECT ntpn

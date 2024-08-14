@@ -6,8 +6,8 @@
             background-color: yellow !important;
         }
 
-        .txt-duplicated {
-            background-color: red !important;
+        .tx-duplicated {
+            color: red;
         }
     </style>
 @endpush
@@ -230,10 +230,19 @@ $(function() {
                 if (data.duplikat) {
                     node.classList.add("bg-duplicated");
 
-                    const node_ntpn = datas.row(`:eq(${index})`).cells()
-                    console.log(node_ntpn)
-                    // console.log(data.ntpn, data.dr_ntpn)
-                    // console.log(data.kode_billing, data.dr_kode_billing)
+                    const node_kode_billing = $("td:eq(17)", node)[0]
+                    const node_ntpn = $("td:eq(18)", node)[0]
+
+                    console.log(data)
+
+                    // if (data.ntpn == data.dr_ntpn) {
+                    //     console.log(data.ntpn, data.dr_ntpn)
+                    //     node_ntpn.classList.add("tx-duplicated");
+                    // }
+                    // if (data.kode_billing == data.dr_kode_billing) {
+                    //     console.log(data.kode_billing, data.dr_kode_billing)
+                    //     node_kode_billing.classList.add("tx-duplicated");
+                    // }
                 }
             }
 
