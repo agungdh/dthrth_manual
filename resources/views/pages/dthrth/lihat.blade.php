@@ -4,6 +4,7 @@
     <style>
         .bg-duplicated > td {
             background-color: yellow !important;
+            cursor: pointer;
         }
 
         .tx-duplicated {
@@ -114,7 +115,7 @@
                 <div class="col-12 mb-3">
                     <p>Tabel Data</p>
                     <div class="table-responsive">
-                        <table id="tabel-duped-source" class="table table-sm" style="width: 100%">
+                        <table id="tabel-duped-source" class="table table-sm table-hover table-striped table-bordered" style="width: 100%">
                             <thead>
                                 <tr>
                                     <th>SKPD</th>
@@ -149,9 +150,10 @@
                 <div class="col-12">
                     <p>Tabel Data Duplikat</p>
                     <div class="table-responsive">
-                        <table id="tabel-duped" class="table table-sm" style="width: 100%">
+                        <table id="tabel-duped" class="table table-sm table-hover table-striped table-bordered" style="width: 100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>SKPD</th>
                                     <th>Bulan/Tahun</th>
                                     <th>Tanggal Upload</th>
@@ -371,6 +373,7 @@ $(function() {
                             const element = resData.dupedList[index];
 
                             newRow = tbodyRef.insertRow();
+                            newRow.insertCell().appendChild(document.createTextNode(index + 1));
                             newRow.insertCell().appendChild(document.createTextNode(element.dthrth.skpd.skpd));
                             newRow.insertCell().appendChild(document.createTextNode(element.dthrth.bulan_tahun));
                             newRow.insertCell().appendChild(document.createTextNode(element.dthrth.uploaded_at));
@@ -393,12 +396,12 @@ $(function() {
                             newRow.insertCell().appendChild(document.createTextNode(element.nama));
                             let cell = newRow.insertCell()
                             cell.appendChild(document.createTextNode(element.kode_billing))
-                            if(resData.dupedList.filter(d => d.kode_billing == resData.dthrth.kode_billing).length) {
+                            if(element.kode_billing == resData.dthrth.kode_billing) {
                                 cell.classList.add('tx-duplicated')
                             }
                             cell = newRow.insertCell()
                             cell.appendChild(document.createTextNode(element.ntpn))
-                            if(resData.dupedList.filter(d => d.ntpn == resData.dthrth.ntpn).length) {
+                            if(element.ntpn == resData.dthrth.ntpn) {
                                 cell.classList.add('tx-duplicated')
                             }
                             newRow.insertCell().appendChild(document.createTextNode(element.ket));
