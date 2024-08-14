@@ -219,33 +219,43 @@ $(function() {
             {data: 'ntpn', name: 'r.ntpn'},
             {data: 'ket', name: 'r.ket'},
         ],
-        drawCallback: function (settings) {
+        drawCallback: async function (settings) {
             var api = this.api();
 
             let datas = api.rows({ page: 'current' }).data()
+
+            let ntpns = []
+            let kode_billings = []
+
             for (let index = 0; index < datas.length; index++) {
                 const node = datas.row(`:eq(${index})`).node()
                 const data = datas.row(`:eq(${index})`).data()
 
+                kode_billings.push(data.kode_billing)
+                ntpns.push(data.ntpn)
+
                 if (data.duplikat) {
                     node.classList.add("bg-duplicated");
-
-                    const node_kode_billing = $("td:eq(17)", node)[0]
-                    const node_ntpn = $("td:eq(18)", node)[0]
-
-                    console.log(data)
-
-                    // if (data.ntpn == data.dr_ntpn) {
-                    //     console.log(data.ntpn, data.dr_ntpn)
-                    //     node_ntpn.classList.add("tx-duplicated");
-                    // }
-                    // if (data.kode_billing == data.dr_kode_billing) {
-                    //     console.log(data.kode_billing, data.dr_kode_billing)
-                    //     node_kode_billing.classList.add("tx-duplicated");
-                    // }
                 }
             }
 
+            let res = await axios.post('/dthrth/checkDuplikat', {ntpns, kode_billings})
+            let resData = res.data
+
+            for (let index = 0; index < datas.length; index++) {
+                const node = datas.row(`:eq(${index})`).node()
+                const data = datas.row(`:eq(${index})`).data()
+
+                const node_kode_billing = $("td:eq(17)", node)[0]
+                const node_ntpn = $("td:eq(18)", node)[0]
+
+                if (resData.dupedNtpns.includes(data.ntpn)) {
+                    node_ntpn.classList.add("tx-duplicated");
+                }
+                if (resData.dupedKodeBillings.includes(data.kode_billing)) {
+                    node_kode_billing.classList.add("tx-duplicated");
+                }
+            }
         },
     } );
 });

@@ -80,6 +80,44 @@ class DTHRTHController extends Controller implements HasMiddleware
             ->make();
     }
 
+    public function checkDuplikat(Request $request)
+    {
+        $ntpns = DB::table(DB::raw('(
+            SELECT ntpn
+            FROM dthrth_rincis
+            WHERE ntpn IN (
+                SELECT ntpn
+                FROM dthrth_rincis
+                GROUP BY ntpn
+                HAVING COUNT(*) > 1
+            )
+        ) as tbl'));
+
+        $ntpns = $ntpns->whereIn('ntpn', $request->ntpns);
+
+        $dupedNtpns = $ntpns->select('ntpn')->distinct()->pluck('ntpn');
+
+        $kodeBillings = DB::table(DB::raw('(
+            SELECT kode_billing
+            FROM dthrth_rincis
+            WHERE kode_billing IN (
+                SELECT kode_billing
+                FROM dthrth_rincis
+                GROUP BY kode_billing
+                HAVING COUNT(*) > 1
+            )
+        ) as tbl'));
+
+        $kodeBillings = $kodeBillings->whereIn('kode_billing', $request->kode_billings);
+
+        $dupedKodeBillings = $kodeBillings->select('kode_billing')->distinct()->pluck('kode_billing');
+
+        return compact([
+            'dupedNtpns',
+            'dupedKodeBillings',
+        ]);
+    }
+
     public function check(Request $request)
     {
         $checkWhere = [
