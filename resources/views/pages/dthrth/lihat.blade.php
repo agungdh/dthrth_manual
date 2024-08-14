@@ -112,6 +112,7 @@
         <div class="modal-body">
             <div class="row">
                 <div class="col-12 mb-3">
+                    <p>Tabel Data</p>
                     <div class="table-responsive">
                         <table id="tabel-duped-source" class="table table-sm" style="width: 100%">
                             <thead>
@@ -146,6 +147,7 @@
                     </div>
                 </div>
                 <div class="col-12">
+                    <p>Tabel Data Duplikat</p>
                     <div class="table-responsive">
                         <table id="tabel-duped" class="table table-sm" style="width: 100%">
                             <thead>
@@ -350,8 +352,16 @@ $(function() {
                         newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.jumlah));
                         newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.npwp));
                         newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.nama));
-                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.kode_billing));
-                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.ntpn));
+                        let cell = newRow.insertCell()
+                        cell.appendChild(document.createTextNode(resData.dthrth.kode_billing))
+                        if(resData.dupedList.filter(d => d.kode_billing == resData.dthrth.kode_billing).length) {
+                            cell.classList.add('tx-duplicated')
+                        }
+                        cell = newRow.insertCell()
+                        cell.appendChild(document.createTextNode(resData.dthrth.ntpn))
+                        if(resData.dupedList.filter(d => d.ntpn == resData.dthrth.ntpn).length) {
+                            cell.classList.add('tx-duplicated')
+                        }
                         newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.ket));
 
                         // Fill Tabel Duped Data
@@ -381,8 +391,16 @@ $(function() {
                             newRow.insertCell().appendChild(document.createTextNode(element.jumlah));
                             newRow.insertCell().appendChild(document.createTextNode(element.npwp));
                             newRow.insertCell().appendChild(document.createTextNode(element.nama));
-                            newRow.insertCell().appendChild(document.createTextNode(element.kode_billing));
-                            newRow.insertCell().appendChild(document.createTextNode(element.ntpn));
+                            let cell = newRow.insertCell()
+                            cell.appendChild(document.createTextNode(element.kode_billing))
+                            if(resData.dupedList.filter(d => d.kode_billing == resData.dthrth.kode_billing).length) {
+                                cell.classList.add('tx-duplicated')
+                            }
+                            cell = newRow.insertCell()
+                            cell.appendChild(document.createTextNode(element.ntpn))
+                            if(resData.dupedList.filter(d => d.ntpn == resData.dthrth.ntpn).length) {
+                                cell.classList.add('tx-duplicated')
+                            }
                             newRow.insertCell().appendChild(document.createTextNode(element.ket));
                         }
 
