@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index']);
 
-Route::post('/dthrth/datatableDuped', [DTHRTHController::class, 'datatableDuped']);
 Route::post('/dthrth/datatableLihat', [DTHRTHController::class, 'datatableLihat']);
 Route::post('/dthrth/datatable', [DTHRTHController::class, 'datatable']);
 Route::post('/dthrth/listDuped', [DTHRTHController::class, 'listDuped']);

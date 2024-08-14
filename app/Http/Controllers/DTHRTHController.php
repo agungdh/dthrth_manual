@@ -21,11 +21,6 @@ class DTHRTHController extends Controller implements HasMiddleware
         ];
     }
 
-    public function datatableDuped(Request $request)
-    {
-        return DataTables::of([])->make();
-    }
-
     public function datatable(Request $request)
     {
         $datas = DTHRTH::query();
@@ -87,7 +82,13 @@ class DTHRTHController extends Controller implements HasMiddleware
 
     public function listDuped(Request $request)
     {
-        $dthrth = DTHRTHRinci::with('dthrth.skpd')->findOrFail($request->excluded_id);
+        $dthrthSource = DTHRTHRinci::with('dthrth.skpd')->findOrFail($request->excluded_id);
+        $dthrth = $dthrthSource->dthrth;
+
+        $dthrth->bulan = (int) date_format(date_create($dthrth->bulan_tahun), 'm');
+        $dthrth->tahun = (int) date_format(date_create($dthrth->bulan_tahun), 'Y');
+        $dthrth->bulan_tahun = date_format(date_create($dthrth->bulan_tahun), 'm').'/'.date_format(date_create($dthrth->bulan_tahun), 'Y');
+        $dthrth->uploaded_at = date_format(date_create($dthrth->uploaded_at), 'd-m-Y H:i:s');
 
         $datas = DTHRTHRinci::with('dthrth.skpd')
             ->where(function ($query) use ($request) {
@@ -107,7 +108,7 @@ class DTHRTHController extends Controller implements HasMiddleware
         });
 
         return [
-            'dthrth' => $dthrth,
+            'dthrth' => $dthrthSource,
             'dupedList' => $datas,
         ];
     }

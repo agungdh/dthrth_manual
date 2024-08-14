@@ -175,6 +175,7 @@
                                     <th>ket</th>
                                 </tr>
                             </thead>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -324,14 +325,66 @@ $(function() {
                     $(node).click(async function() {
                         let res = await axios.post('/dthrth/listDuped', {ntpn: data.ntpn, kode_billing: data.kode_billing, excluded_id: data.id})
                         let resData = res.data
-                        console.log(resData)
+
                         // Fill Tabel Source Data
+                        $("#tabel-duped-source > tbody")[0].innerHTML = ''
                         let tbodyRef = $("#tabel-duped-source > tbody")[0]
                         let newRow = tbodyRef.insertRow();
-                        newRow.insertCell().appendChild(document.createTextNode('new row'));
-                        newRow.insertCell().appendChild(document.createTextNode('new row'));
-                        newRow.insertCell().appendChild(document.createTextNode('new row'));
-                        newRow.insertCell().appendChild(document.createTextNode('new row'));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.dthrth.skpd.skpd));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.dthrth.bulan_tahun));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.dthrth.uploaded_at));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.no));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.no_spm));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.nilai_spm));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.tanggal_spm));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.no_sp2d));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.nilai_sp2d));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.tanggal_sp2d));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.kode_akun_belanja));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.kode_akun_pajak));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.ppn));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.pph21));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.pph22));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.pph23));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.pph4_2));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.jumlah));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.npwp));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.nama));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.kode_billing));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.ntpn));
+                        newRow.insertCell().appendChild(document.createTextNode(resData.dthrth.ket));
+
+                        // Fill Tabel Duped Data
+                        $("#tabel-duped > tbody")[0].innerHTML = ''
+                        tbodyRef = $("#tabel-duped > tbody")[0]
+                        for (let index = 0; index < resData.dupedList.length; index++) {
+                            const element = resData.dupedList[index];
+
+                            newRow = tbodyRef.insertRow();
+                            newRow.insertCell().appendChild(document.createTextNode(element.dthrth.skpd.skpd));
+                            newRow.insertCell().appendChild(document.createTextNode(element.dthrth.bulan_tahun));
+                            newRow.insertCell().appendChild(document.createTextNode(element.dthrth.uploaded_at));
+                            newRow.insertCell().appendChild(document.createTextNode(element.no));
+                            newRow.insertCell().appendChild(document.createTextNode(element.no_spm));
+                            newRow.insertCell().appendChild(document.createTextNode(element.nilai_spm));
+                            newRow.insertCell().appendChild(document.createTextNode(element.tanggal_spm));
+                            newRow.insertCell().appendChild(document.createTextNode(element.no_sp2d));
+                            newRow.insertCell().appendChild(document.createTextNode(element.nilai_sp2d));
+                            newRow.insertCell().appendChild(document.createTextNode(element.tanggal_sp2d));
+                            newRow.insertCell().appendChild(document.createTextNode(element.kode_akun_belanja));
+                            newRow.insertCell().appendChild(document.createTextNode(element.kode_akun_pajak));
+                            newRow.insertCell().appendChild(document.createTextNode(element.ppn));
+                            newRow.insertCell().appendChild(document.createTextNode(element.pph21));
+                            newRow.insertCell().appendChild(document.createTextNode(element.pph22));
+                            newRow.insertCell().appendChild(document.createTextNode(element.pph23));
+                            newRow.insertCell().appendChild(document.createTextNode(element.pph4_2));
+                            newRow.insertCell().appendChild(document.createTextNode(element.jumlah));
+                            newRow.insertCell().appendChild(document.createTextNode(element.npwp));
+                            newRow.insertCell().appendChild(document.createTextNode(element.nama));
+                            newRow.insertCell().appendChild(document.createTextNode(element.kode_billing));
+                            newRow.insertCell().appendChild(document.createTextNode(element.ntpn));
+                            newRow.insertCell().appendChild(document.createTextNode(element.ket));
+                        }
 
                         $("#modalDuped").modal()
                     })
